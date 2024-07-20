@@ -1,0 +1,125 @@
+services:
+  redis-master:
+    image: redis:latest
+    container_name: redis-master
+    command: [ "redis-server", "--port", "6379", "--replica-announce-ip", "${CURRENT_HOST_IP_ADDRESS}", "--replica-announce-port", "6379" ]
+    ports:
+      - "6379:6379"
+    networks:
+      redis-net:
+        ipv4_address: 172.20.0.2
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-slave1:
+    image: redis:latest
+    container_name: redis-slave1
+    depends_on:
+      - redis-master
+    command: [ "redis-server", "--port", "6379", "--replicaof", "redis-master", "6379", "--replica-announce-ip", "${CURRENT_HOST_IP_ADDRESS}", "--replica-announce-port", "6380" ]
+    ports:
+      - "6380:6379"
+    networks:
+      redis-net:
+        ipv4_address: 172.20.0.3
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-slave2:
+    image: redis:latest
+    container_name: redis-slave2
+    depends_on:
+      - redis-master
+    command: [ "redis-server", "--port", "6379", "--replicaof", "redis-master", "6379", "--replica-announce-ip", "${CURRENT_HOST_IP_ADDRESS}","--replica-announce-port", "6381" ]
+    ports:
+      - "6381:6379"
+    networks:
+      redis-net:
+        ipv4_address: 172.20.0.4
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  sentinel1:
+    image: redis:latest
+    container_name: redis-sentinel1
+    depends_on:
+      - redis-master
+      - redis-slave1
+      - redis-slave2
+    command: [ "redis-sentinel", "/etc/sentinel/sentinel1.conf" ]
+    ports:
+      - 26379:26379
+    networks:
+      redis-net:
+        ipv4_address: 172.20.0.5
+    volumes:
+      - ./sentinel:/etc/sentinel
+    healthcheck:
+      test: [ "CMD", "redis-cli","-p","26379", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    extra_hosts:
+      - "redis-master: ${CURRENT_HOST_IP_ADDRESS}"
+
+  sentinel2:
+    image: redis:latest
+    container_name: redis-sentinel2
+    depends_on:
+      - redis-master
+      - redis-slave1
+      - redis-slave2
+    command: [ "redis-sentinel", "/etc/sentinel/sentinel2.conf" ]
+    ports:
+      - 26380:26379
+    networks:
+      redis-net:
+        ipv4_address: 172.20.0.6
+    volumes:
+      - ./sentinel:/etc/sentinel
+    healthcheck:
+      test: [ "CMD", "redis-cli","-p","26379", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    extra_hosts:
+      - "redis-master: ${CURRENT_HOST_IP_ADDRESS}"
+
+  sentinel3:
+    image: redis:latest
+    container_name: redis-sentinel3
+    depends_on:
+      - redis-master
+      - redis-slave1
+      - redis-slave2
+    command: [ "redis-sentinel", "/etc/sentinel/sentinel3.conf" ]
+    ports:
+      - 26381:26379
+    networks:
+      redis-net:
+        ipv4_address: 172.20.0.7
+    volumes:
+      - ./sentinel:/etc/sentinel
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-p","26379","ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    extra_hosts:
+      - "redis-master: ${CURRENT_HOST_IP_ADDRESS}"
+
+networks:
+  redis-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
