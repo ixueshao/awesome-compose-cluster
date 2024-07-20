@@ -1,3 +1,26 @@
+# compose-redis-sentinel
+
+## installation
+
+1. 获取Redis要绑定本地的IP
+2. 运行脚本
+
+```shell
+bash ./prepare.sh install $ip
+```
+
+## uninstall
+
+```shell
+bash ./prepare.sh uninstall
+```
+
+## check cluster
+
+```shell
+bash ./prepare.sh check
+```
+
 ## 坑
 
 1. 启动redis-sentinel，遇到无法解析主机名redis-master

@@ -18,6 +18,7 @@ install(){
   cp -R ./sentinel-example sentinel
 
   sed -i '' "s#CURRENT_HOST_IP_ADDRESS#${HOST_IP_ADDRESS}#g" sentinel/sentinel*
+  echo "CURRENT_HOST_IP_ADDRESS=$HOST_IP_ADDRESS" > .env
 
   docker-compose up -d
 }
