@@ -16,6 +16,7 @@ printMsg(){
 #安装集群
 install(){
   printMsg "安装集群"
+  echo "ANNOUNCE_IP=$1" > ./.env
   #安装redis
   docker-compose up -d
   returnExitMsg "安装集群"
@@ -35,8 +36,7 @@ init(){
   printMsg "初始化集群"
   #初始化集群
   yes yes | docker exec -i redis1 redis-cli --cluster create \
-    redis1:6379 redis2:6379 redis3:6379 redis4:6379 redis5:6379 \
-    redis6:6379 --cluster-replicas 1
+    $1:7001 $1:7002 $1:7003 $1:7004 $1:7005 $1:7006 --cluster-replicas 1
   returnExitMsg "初始化集群"
 }
 
@@ -55,8 +55,8 @@ check(){
 
 #判断脚本的第一个参数是install还是uninstall, 为install则执行安装, 为uninstall则执行卸载
 if [ $1 = "install" ]; then
-  install
-  init
+  install $2
+  init $2
   check
 elif [ $1 = "uninstall" ]; then
   uninstall

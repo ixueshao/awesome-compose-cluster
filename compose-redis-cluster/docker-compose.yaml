@@ -2,9 +2,10 @@ services:
   redis1:
     image: redis:latest
     container_name: redis1
-    command: redis-server --appendonly yes --cluster-enabled yes
+    command: ["redis-server","--appendonly", "yes" ,"--cluster-enabled", "yes", "--cluster-announce-ip","${ANNOUNCE_IP}","--cluster-announce-port","7001","--cluster-announce-bus-port","17001"]
     ports:
       - 7001:6379
+      - 17001:16379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -14,9 +15,10 @@ services:
   redis2:
     image: redis:latest
     container_name: redis2
-    command: redis-server --appendonly yes --cluster-enabled yes
+    command: ["redis-server","--appendonly", "yes" ,"--cluster-enabled", "yes", "--cluster-announce-ip","${ANNOUNCE_IP}","--cluster-announce-port","7002","--cluster-announce-bus-port","17002"]
     ports:
       - 7002:6379
+      - 17002:16379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -26,9 +28,10 @@ services:
   redis3:
     image: redis:latest
     container_name: redis3
-    command: redis-server --appendonly yes --cluster-enabled yes
+    command: ["redis-server","--appendonly", "yes" ,"--cluster-enabled", "yes", "--cluster-announce-ip","${ANNOUNCE_IP}","--cluster-announce-port","7003","--cluster-announce-bus-port","17003"]
     ports:
       - 7003:6379
+      - 17003:16379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -38,9 +41,10 @@ services:
   redis4:
     image: redis:latest
     container_name: redis4
-    command: redis-server --appendonly yes --cluster-enabled yes
+    command: ["redis-server","--appendonly", "yes" ,"--cluster-enabled", "yes", "--cluster-announce-ip","${ANNOUNCE_IP}","--cluster-announce-port","7004","--cluster-announce-bus-port","17004"]
     ports:
       - 7004:6379
+      - 17004:16379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -50,9 +54,10 @@ services:
   redis5:
     image: redis:latest
     container_name: redis5
-    command: redis-server --appendonly yes --cluster-enabled yes
+    command: ["redis-server","--appendonly", "yes" ,"--cluster-enabled", "yes", "--cluster-announce-ip","${ANNOUNCE_IP}","--cluster-announce-port","7005","--cluster-announce-bus-port","17005"]
     ports:
       - 7005:6379
+      - 17005:16379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -62,9 +67,10 @@ services:
   redis6:
     image: redis:latest
     container_name: redis6
-    command: redis-server --appendonly yes --cluster-enabled yes
+    command: ["redis-server","--appendonly", "yes" ,"--cluster-enabled", "yes", "--cluster-announce-ip","${ANNOUNCE_IP}","--cluster-announce-port","7006","--cluster-announce-bus-port","17006"]
     ports:
       - 7006:6379
+      - 17006:16379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
