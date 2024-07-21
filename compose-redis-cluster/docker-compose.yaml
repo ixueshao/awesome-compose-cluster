@@ -1,0 +1,72 @@
+services:
+  redis1:
+    image: redis:latest
+    container_name: redis1
+    command: redis-server --appendonly yes --cluster-enabled yes
+    ports:
+      - 7001:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis2:
+    image: redis:latest
+    container_name: redis2
+    command: redis-server --appendonly yes --cluster-enabled yes
+    ports:
+      - 7002:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis3:
+    image: redis:latest
+    container_name: redis3
+    command: redis-server --appendonly yes --cluster-enabled yes
+    ports:
+      - 7003:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis4:
+    image: redis:latest
+    container_name: redis4
+    command: redis-server --appendonly yes --cluster-enabled yes
+    ports:
+      - 7004:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis5:
+    image: redis:latest
+    container_name: redis5
+    command: redis-server --appendonly yes --cluster-enabled yes
+    ports:
+      - 7005:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis6:
+    image: redis:latest
+    container_name: redis6
+    command: redis-server --appendonly yes --cluster-enabled yes
+    ports:
+      - 7006:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
