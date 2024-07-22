@@ -1,0 +1,74 @@
+[mysqld]
+##### 这两部操作可以解决mysql连接很慢的问题 #####
+# 根据官方文档说明，如果你的mysql主机查询DNS很慢或是有很多客户端主机时会导致连接很慢，由于我们的开发机器是不能够连接外网的，
+# 所以DNS解析是不可能完成的，从而也就明白了为什么连接那么慢了。同时，请注意在增加该配置参数后，mysql的授权表中的host字段就
+# 不能够使用域名而只能够使用 ip地址了，因为这是禁止了域名解析的结果。
+
+# 1.禁止域名解析
+skip-host-cache
+
+# 2.禁用dns解析，但是，这样不能在mysql的授权表中使用主机名了，只能使用IP。
+skip-name-resolve
+
+# 数据库编号, 要具有唯一性, 不能跟其他数据库重复, 方便同步区分
+server-id = 21
+
+####################################################################
+## 启用binlog日志，格式: mysql默认采用statement，建议使用 mixed(是statement和row模式的结合)
+####################################################################
+binlog_format = mixed
+log_bin = /var/lib/mysql/mysql-bin.log
+relay-log = /var/lib/mysql/mysql-relay-bin.log
+
+
+####################################################################
+## 需要同步的数据库
+####################################################################
+binlog_do_db = mydb
+
+####################################################################
+## 启用错误日志
+####################################################################
+log_error_verbosity=1
+log_error=/var/lib/mysql/error.log
+#log_warnings=1
+
+####################################################################
+## 启用MySQL日志审计
+####################################################################
+plugin_load_add = server_audit.so
+server_audit_output_type = file
+server_audit_logging=on
+server_audit_file_rotate_now = ON
+server_audit_file_path =/var/lib/mysql/server_audit.log
+server_audit_file_rotate_size=10000000
+server_audit=FORCE_PLUS_PERMANENT
+server_audit_incl_users=''
+server_audit_excl_users=''
+server_audit_events = connect,query,table,query_ddl,query_dml,query_dcl
+
+####################################################################
+## 启用MySQL用户密码策略
+####################################################################
+#plugin_load_add = validate_password.so
+#策略添加了密码必须至少包含1个数字字符，1个小写字符，1个大写字符和1个特殊（非字母数字）字符的条件。
+#validate_password_policy=MEDIUM
+#当validate_password_policy设置为MEDIUM或者STRONG时，密码中至少同时拥有的小写和大写字母的数量，默认是1最小是0；默认是至少拥有一个小写和一个大写字母。
+#validate_password_mixed_case_count=1
+#整个密码中至少要包含阿拉伯数字的个数,当validate_password_policy设置为MEDIUM或者STRONG时，密码中至少拥有的数字的个数，默认1最小是0
+#validate_password_number_count=1
+#当validate_password_policy设置为MEDIUM或者STRONG时，密码中至少拥有的特殊字符的个数，默认1最小是0
+#validate_password_special_char_count=1
+#validate_password_length=10
+#default_password_lifetime=90
+
+####################################################################
+## 启用MySQL登录失败限制
+####################################################################
+plugin_load_add = connection_control.so
+max_connect_errors=3
+connection-control = FORCE
+connection-control-failed-login-attempts = FORCE
+connection_control_min_connection_delay = 1000
+connection_control_max_connection_delay = 86400
+connection_control_failed_connections_threshold	= 3
