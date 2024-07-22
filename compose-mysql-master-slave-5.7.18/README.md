@@ -1,7 +1,7 @@
 ## 启动
 
 ```shell
-bash ./build.sh run
+bash ./prepare.sh run
 ````
 
 日志输出如下
@@ -161,25 +161,25 @@ Master_SSL_Verify_Server_Cert: No
 ## 清理
 
 ```shell
-bash ./build.sh clean
+bash ./prepare.sh clean
 ```
 
 ## 其他(等保场景)
 
 ```shell
-bash ./build.sh enablePassPolicy #启用密码策略
+bash ./prepare.sh enablePassPolicy #启用密码策略
 ```
 
 ```shell
-bash ./build.sh enableConnectionControll #启用连接策略
+bash ./prepare.sh enableConnectionControll #启用连接策略
 ```
 
 ```shell
-bash ./build.sh audit #启用审计策略
+bash ./prepare.sh audit #启用审计策略
 ```
 
 ```shell
-bash ./build.sh cmd mysql_master password #在mysql_master容器中检查password类环境变量配置
+bash ./prepare.sh cmd mysql_master password #在mysql_master容器中检查password类环境变量配置
 ```
 
 你会在`data`目录下查看到对应的日志文件
